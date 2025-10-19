@@ -204,7 +204,7 @@ public class Main {
                     break;
 
                 case 6:
-                    System.out.print("OBRIGADO POR UTILIZAR A NOSSA AGENDA :)");
+                    System.out.print("OBRIGADO(A) POR UTILIZAR A AGENDA :)");
 
             }
             System.out.println();
