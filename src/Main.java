@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    // ******** Subalgoritmos *********
+    // *********** SUBALGORITMOS ************
 
     public static Scanner teclado = new Scanner(System.in);
     public static String agenda[][] = new String[10][3];
@@ -17,12 +17,107 @@ public class Main {
         }
     }
 
+    public static void novo(String mm[][], int l)
+    {
+        System.out.println("------------ PREENCHA O NOVO CONTATO: ");
+        System.out.print("Nome.........: ");
+        mm[l][0] = teclado.next();
+        System.out.print("Celular......: ");
+        mm[l][1] = teclado.next();
+        System.out.print("E-mail.......: ");
+        mm[l][2] = teclado.next();
+    }
 
+    public static void editarContato(String mm[][], int l)
+    {
+        // Permite ao usuário editar o celular e e-mail.
+        System.out.println("------------ EDITE O CONTATO: ");
+        System.out.println("Nome.........: " + mm[l][0] + " ");
+        System.out.print("Celular......: ");
+        mm[l][1] = teclado.next();
+        System.out.print("E-mail.......: ");
+        mm[l][2] = teclado.next();
+    }
 
+    public static int linhaProximoContato(String mm[][])
+    {
+        for(int l = 0; l < 10; l++)
+            if (mm[l][0].equals(""))
+            {
+                // próxima linha vazia
+                return l;
+            }
+        return -1;
+    }
 
+    public static void exibirContato(String mm[][], int linha)
+    {
+        // Exibe o registro
+        System.out.println("Nome........: " + mm[linha][0]);
+        System.out.println("Celular.....: " + mm[linha][1]);
+        System.out.println("E-mail......: " + mm[linha][2]);
+    }
 
+    public static void listarAgenda(String mm[][])
+    {
+        System.out.println("------------ CONTATOS DA AGENDA: ");
+        for(int l = 0; l < 10; l++)
+        {
+            if (mm[l][0] != "") {
+                exibirContato(mm, l);
+                System.out.println("------------------------------------------");
+            }
+        }
+        System.out.println("------------ FIM DA AGENDA: ");
+    }
 
+    public static int pesquisarContato(String mm[][], String n)
+    {
+        for(int l = 0; l < 10; l++)
+            if (mm[l][0].equals(n)) {
+                return l;
+            }
+        return -1;
+    }
 
+    public static void excluiLinha(String mm[][], int l)
+    {
+        // exclui o contato a partir da linha passada por parâmetro
+        mm[l][0] = "";
+        mm[l][1] = "";
+        mm[l][2] = "";
+        System.out.println("Contato Excluído");
+    }
+
+    public static void apagarContato(String mm[][], String n)
+    {
+        boolean achou = false;
+        int linha = pesquisarContato(mm, n);
+        String opcao;
+        if(linha != -1)
+        {
+            exibirContato(mm,linha);
+            // Confirma com o usuário se ele quer excluir ou nao o contato
+            System.out.println("Confirma a exclusão do contato? [S]im ou [N]ão?");
+                    opcao = teclado.next();
+            if(opcao.equals("s") || opcao.equals("S"))
+            {
+                //exclui o contato
+                excluiLinha(mm, linha);
+            }
+            else
+            {
+                // Cancela a exclusão
+                System.out.println("Exclusão cancelada!");
+            }
+        }
+        else
+        {
+            // Contato não encontrado
+            System.out.println("Contato não encontrado!");
+        }
+
+    }
 
     public static void exibeMenu()
     {
@@ -35,7 +130,7 @@ public class Main {
         System.out.println("6 - Sair");
     }
 
-    // PROGRAMA PRINCIAPAL
+    // ************* PROGRAMA PRINCIPAL ****************
     public static void main(String[] args) {
         int opcao, linha;
         String nome;
@@ -52,7 +147,67 @@ public class Main {
             opcao = teclado.nextInt();
             System.out.println();
 
+            // Opções
+            switch(opcao){
+                case 1:
+                    novo(agenda, linhaProximoContato(agenda));
+                    break;
 
+                case 2:
+                    System.out.println("------------ EDITANDO (PESQUISE O CONTATO): ");
+                    System.out.print("Digite o nome.........:");
+                    nome = teclado.next();
+                    linha = pesquisarContato(agenda, nome);
+                    if (linha == -1)
+                    {
+                        System.out.print("Contato não Cadastrado!");
+                    }
+                    else
+                    {
+                        exibirContato(agenda, linha);
+                        editarContato(agenda, linha);
+                    }
+                    break;
+
+                // Efetua a pesquisa do contato
+                case 3:
+                    // Solicita o nome
+                    System.out.println("------------ PESQUISE O CONTATO: ");
+                    System.out.print("Digite o nome.........:");
+                    nome = teclado.next();
+
+                    linha = pesquisarContato(agenda, nome);
+                    if (linha == -1)
+                    {
+                        // Se o contato não existe
+                        System.out.print("Contato não Cadastrado!");
+                    }
+                    else
+                    {
+                        // Se o contato existe, exibí-lo
+                        exibirContato(agenda, linha);
+                    }
+                    break;
+
+                // Lista todos os Contatos da agenda
+                case 4:
+                    listarAgenda(agenda);
+                    break;
+
+                // Exclui um registro digitado pelo usuário
+                case 5:
+
+                    System.out.println("------------ EXCLUINDO (PESQUISE O CONTATO): ");
+                    System.out.print("Digite o nome.........:");
+                    nome = teclado.next();
+                    apagarContato(agenda, nome);
+                    break;
+
+                case 6:
+                    System.out.print("OBRIGADO POR UTILIZAR A NOSSA AGENDA :)");
+
+            }
+            System.out.println();
 
         }while (opcao != 6);
 
